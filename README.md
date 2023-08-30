@@ -1,7 +1,8 @@
 # PS4_PS5-ESP8266-Server
 A WebServer+Wifi Repeater+Fake DNS Server to Host PS4/PS5 Exploits on ESP8266
 
-![exploit_in_action](https://github.com/frwololo/PS4_PS5-ESP8266-Server/assets/2976011/51168267-10d6-4247-ad61-b3bfecf821da)
+![exploit_in_action](https://github.com/frwololo/PS4_PS5-ESP8266-Server/assets/2976011/04c4fcd9-41da-4975-9ede-ad7c7fda3a0d)
+
 
 
 ## Details and usage
@@ -25,13 +26,17 @@ In other words, it's a self contained solution to run the PS4/PS5 exploits while
 - Flash a precompiled binary (from [release page](https://github.com/frwololo/PS4_PS5-ESP8266-Server/releases)) to your ESP8266, for example using [NodeMCU Flasher](https://github.com/marcelstoer/nodemcu-pyflasher) (Select Yes to Erase Flash)
 - After flashing, reset the device (e.g. by unplugging then re-plugging it from USB)
 - Connect to Wifi access point "PS5_WEB_AP" with your computer (password is "password"). Notice that this can be very slow to connect, because the device can't access the internet yet, and Windows isn't happy about that.
-- ![wifi_connection](https://github.com/frwololo/PS4_PS5-ESP8266-Server/assets/2976011/1b8eed2d-929f-4689-85c2-3cc5ef97c45e)
+
+![wifi_connection](https://github.com/frwololo/PS4_PS5-ESP8266-Server/assets/2976011/387d4893-e548-4500-bb7b-0a235176c7ab)
+
 
 - Once connected to the Access point, go to 10.1.1.1/admin.html in your PC's web browser
-- ![config_init](https://github.com/frwololo/PS4_PS5-ESP8266-Server/assets/2976011/b2ef5734-4dbf-4e97-9445-c8e205cd32aa)
+![config_init](https://github.com/frwololo/PS4_PS5-ESP8266-Server/assets/2976011/b2d517db-0a53-4a6c-9f04-52f8fb9044af)
+
 
 - You should see the config settings, where you can (should) set ENABLE WIFI to 1, and below that enter the SSID and Password for your Home's Wifi Router
-  - ![config_ok](https://github.com/frwololo/PS4_PS5-ESP8266-Server/assets/2976011/989e4059-4ee7-4df5-8cbc-5bcdb4d76ab4)
+  
+![config_ok](https://github.com/frwololo/PS4_PS5-ESP8266-Server/assets/2976011/e4db722a-6400-4978-a234-e64eae99dd01)
 
   - This will set the ESP8266 into the self contained mode with Fake DNS, Internet Access, etc...
 - Once config is saved, the ESP8266 should restart on its own (if it doesn't, unplug then replug it)
@@ -61,7 +66,8 @@ There are a bunch of tutorials on how to run these out there, once ths host is s
   - lwip variant: "v2 lower memory works" for me. Other might be fine, but don't select one that says "no features" (we use the lwip NAT features in this project)
   - Flash Size: 4MB (with 3MB for FileSystem <-- need quite some space to store the exploits)
  
-  ![nodemcu_settings](https://github.com/frwololo/PS4_PS5-ESP8266-Server/assets/2976011/487755d7-5f3b-437d-b27d-44f4e9038ecd)
+![nodemcu_settings](https://github.com/frwololo/PS4_PS5-ESP8266-Server/assets/2976011/bc66dc78-a5da-4e65-bb4a-572ca6214f8b)
+
 
 
 ## FAQ and Troubleshooting
