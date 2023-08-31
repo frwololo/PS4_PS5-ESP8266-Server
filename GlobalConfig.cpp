@@ -78,7 +78,7 @@ void GlobalConfig::loadConfigFromStorage(void)
 
 void GlobalConfig::DebugOutput(void) {
 #ifdef GLOBALCONFIG_DEBUG 
-  Serial.println("***Config****");
+  Serial.println(F("***Config****"));
   
   Serial.println("SSID: " + AP_SSID);
   Serial.println("Password: " + AP_PASS);
@@ -87,6 +87,6 @@ void GlobalConfig::DebugOutput(void) {
   Serial.println("Connect Wifi: " + connectWifi);
   Serial.println("WIFI_SSID: " + WIFI_SSID);  
   Serial.println("WIFI_PASS: " + WIFI_PASS);    
-  Serial.println("***END Config****");
+  Serial.println(F("***END Config****"));
 #endif
 }

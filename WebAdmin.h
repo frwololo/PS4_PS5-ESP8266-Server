@@ -1,12 +1,7 @@
 #ifndef WEBADMIN_H
 #define WEBADMIN_H
 
-//Extended WebAdmin gives access to much more options in the WebAdmin page: File Management, etc...
-//But it uses too much heap so I deactivated most of the functionality for now.
-//It is mostly untested, made of scavenged parts from Stooged's Server
-//TODO: move html to actual files on SPIFF?
-//     Compress?
-//     Use char* instead of String objects?
+//Extended WebAdmin gives access to optional menus in the WebAdmin pages, but uses additional heap
 //#define EXTENDED_WEBADMIN  
 
 #include <ESP8266WebServer.h>
@@ -22,12 +17,11 @@ class WebAdmin {
 
 
   static void handleConfig();
-  static String html_header(const char* title, const char *js = "");
+  static String html_header(const char* title, const char *js_progmem_ptr);
   static String genConfigHtmlInput(String text, String id, String value);
   static void   handleConfigHtml();  
   static void handleRebootMsg(const char * message);
 
-#ifdef EXTENDED_WEBADMIN
   static String formatBytes(size_t bytes);
   static void handleFileUpload();
  static  void handleFormat();
@@ -37,8 +31,8 @@ class WebAdmin {
   static void   handleFormatHtml();
   static void   handleAdminHtml();
   static void handleRebootHtml();
-
   static void handleReboot();
+#ifdef EXTENDED_WEBADMIN  
   static void handleInfo();
 #endif
   
