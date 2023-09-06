@@ -19,7 +19,7 @@ In other words, it's a self contained solution to run the PS4/PS5 exploits while
 ### Limitations
 - Generally speaking **this shouldn't be considered "production ready" and you're using this at your own risk**. I do not guarantee any level of support. But just in case if you have any questions you can reach out at https://twitter.com/frwololo and https://wololo.net
 - In my tests, Internet deconnections and/or random issues and crashes are frequent. This remains good enough to run the exploits and do a bit of browsing though.
-- Because of heap memory limitation (both the HTTPS WebServer and the NAT routing use a lot of it), developers should be careful to not use too much heap when modifying this code
+- on ESP8266, Because of heap memory limitation (both the HTTPS WebServer and the NAT routing use a lot of it), developers should be careful to not use too much heap when modifying this code. This is not a problem on ESP32.
 
 ### How to Use
 #### Initial Install and Setup
