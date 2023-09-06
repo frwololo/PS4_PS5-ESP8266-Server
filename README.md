@@ -98,6 +98,19 @@ Furthermore, there's no support for regexps at the moment so it's really a simpl
 
 ### Issues accessing regular Internet sites
 Reset the ESP8266/ESP32.
+
+### Issues connecting to the Access Point / Computer disconnects from ESP32 Wifi
+I have run into countless connection issues when testing this code. Generally speaking, I think the code is ok, but there are may factors that can impact connection to a computer (and, I assume, to PS4/PS5)
+- Connection is easier/faster once you have enabled Wifi (and therefore, Wifi Repeater/NAT) in the ESP's settings (10.1.1.1/admin.html). This is because Windows and other clients probe specific urls when connecting to an Access point. Once i can access those urls, in my experience, Windows will disconnect from Wifi less frequently
+- In my experience, Windows stays connected to the ESP's Wifi more reliably if there isn't another net interface to rely on. Specifically, if I unplug my LAN cable, I feel like Windows stays connected to the Wifi more reliably
+- The ESP device in itself may have Wifi signal strength issues. I have found that lots of ESP32 "clones" have a poor wifi signal. Please don't quote me on the following, but here are things that I have found:
+  1) "originals" or brand names tend to have their name printed on the back, while generic or clones have nothing. ![esp32_1](https://github.com/frwololo/PS4_PS5-ESP8266-Server/assets/2976011/6b5523c8-7dfd-4667-887a-74b4bb9df7ef)
+
+  2) Some boards have the Wifi antenna sticking outside of the board, which allegedly helps with Wifi signal.![esp32_2](https://github.com/frwololo/PS4_PS5-ESP8266-Server/assets/2976011/e0eb8c9f-8c66-46d0-9153-88d584419cde)
+
+  3) Some people claim that the boards using the CH340 usb-to-serial have wifi signal issues compared to those using cp2102.
+
+I am not 100% sure how the 3 "flaws" above influence the quality of an ESP32 board, but I can say that I had countless issues running the PS5 Exploit server on ESP32 on a board that turned out to simply have a bery bad Signal Strength. Buying an "original" one from Espressif solved the issue for me.
   
 ## Technical thoughts and stuff
 ### Why
