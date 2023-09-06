@@ -10,8 +10,8 @@ This is an implementation of a barebones webServer to Host PS4/PS5 Exploits on a
 - Basic Webserver to host PS4 and PS5 exploits (including limited support for HTTPS to handle the PS5)
 - FakeDNS that redirects playstation.net (user guides) to the web server, and blocks other playstation addresses
 - The Access Point acts as a Wifi Repeater so that the clients (PS4, PS5, PC) can still access the internet for domains that are not blocked/redirected by the DNS
-- Rudimentary config page to set up your Wifi credentials
-- By default this ships with GoldHEN 2.3 for PS4 5.05, and the PS5 3.xx-4.xx Exploit. Those things can be replaced with other webkit-based exploits (e.g. for other firmwares) by modifying the contents of the Data folder. (flashing the ESP8266 firmware will be necessary to update those files)
+- Rudimentary config/admin pages to set up your Wifi credentials, upload/delete exploits on storage, etc...
+- By default this ships with GoldHEN 2.3 for PS4 5.05, and the PS5 3.xx-4.xx Exploit. Those things can be replaced with other webkit-based exploits (e.g. for other firmwares) by modifying the contents of the Data folder. (either by using the integrated file management page, or by flashing the firmware)
 - Also works in "offline mode", similar to other PS4 ESP8266 hosts out there, if wifi is disabled in config (default).
 
 In other words, it's a self contained solution to run the PS4/PS5 exploits while still keeping Internet access
@@ -19,7 +19,7 @@ In other words, it's a self contained solution to run the PS4/PS5 exploits while
 ### Limitations
 - Generally speaking **this shouldn't be considered "production ready" and you're using this at your own risk**. I do not guarantee any level of support. But just in case if you have any questions you can reach out at https://twitter.com/frwololo and https://wololo.net
 - In my tests, Internet deconnections and/or random issues and crashes are frequent. This remains good enough to run the exploits and do a bit of browsing though.
-- Because of heap memory limitation (both the HTTPS WebServer and the NAT routing use a lot of it) I wasn't able to enable all "Web Admin" features that can be found on Stooged's servers for file management and the like. In particular, it is not possible to update/remove the exploit files with the Web Interface currently. Flashing the device is required.
+- Because of heap memory limitation (both the HTTPS WebServer and the NAT routing use a lot of it), developers should be careful to not use too much heap when modifying this code
 
 ### How to Use
 #### Initial Install and Setup
@@ -56,7 +56,7 @@ There are a bunch of tutorials on how to run these out there, once the host is s
 
 #### Notes
 - If you want/need to get everything back offline like "other" ESP8266 Hosts, go back to 10.1.1.1/admin.html, set "ENABLE WIFI" to 0, then save the config again.
-- To use different exploits (new version of GoldHEN, exploits for different firmwares, etc...), you currently need to upload the files directly to the ESP8266's flash, either by using Sketch Data Upload on Arduino IDE, or any other way that works for you. Can't implement WebAdmin for that due to RAM limitation. Happy if someone knows how to solve the issue
+- To use different exploits (new version of GoldHEN, exploits for different firmwares, etc...), you can either upload files through the integrated File manager (accessible via 10.1.1.1/admin.html), or flash new content directly to the ESP8266 SPIFF
 
 ## How to Build
 - Load the .ino file in Arduino IDE
@@ -77,7 +77,10 @@ It's a very rough design that just looks for some specific domain names (current
 Furthermore, there's no support for regexps at the moment so it's really a simple string check in its current state.
 
 ### Issues accessing ESP8266 HTTPS Server
-If you get some "Error Connection close" when testing https://10.1.1.1 (local HTTPS Server), it is possible the device is running out of Heap memory. For a "regular" user, just try to reset the device. For developers, try to reduce the value of NAPT in the main .ino file.
+If you get some "Error Connection close" when testing https://10.1.1.1 (local HTTPS Server), or local https page not loading, it is possible the device is running out of Heap memory. For a "regular" user, just try to reset the device. For developers, try to reduce the value of NAPT in the main .ino file.
+
+### Issues accessing regular Internet sites
+Reset the ESP8266.
   
 ## Technical thoughts and stuff
 ### Why
@@ -89,7 +92,7 @@ Given that the ESP8266 is able to simultaneously act as an an Access Point AND c
 
 ### Technical considerations
 There are samples showing us how to run an HTTPS WebServer on ESP8266, how to block specific domain names with some ad-blocking DNS, how to enable NAT to use the device as a Wifi Repeater. There wasn't any example of how these things are all put together, so I guess this is now it.
-Technically speaking, putting all these components together isn't particularly hard: The HTTP and HTTPS WebServer, including their content (exploits-related redirections, webAdmin) were takend from projects by [Stooged](https://github.com/stooged), which are widely used in the PS4/PS5 scene on multiple variations of the ESP8266 Hosts. The Default DNS Server however, is designed in a way that it will redirect all traffic to the AP Host (or that's how I understood it at least), so I replaced it with a modified version by [Rubfi](https://github.com/rubfi) which did more or less what I wanted. Last but not least, "Wifi Repeater" samples were available (technically, NAT routing) e.g. at https://github.com/AliBigdeli/Arduino-ESP8266-Repeater. 
+Technically speaking, putting all these components together isn't particularly hard: The HTTP and HTTPS WebServer, including their content (exploits-related redirections, webAdmin) were taken from projects by [Stooged](https://github.com/stooged), which are widely used in the PS4/PS5 scene on multiple variations of the ESP8266 Hosts. The Default DNS Server however, is designed in a way that it will redirect all traffic to the AP Host (or that's how I understood it at least), so I replaced it with a modified version by [Rubfi](https://github.com/rubfi) which did more or less what I wanted. Last but not least, "Wifi Repeater" samples were available (technically, NAT routing) e.g. at https://github.com/AliBigdeli/Arduino-ESP8266-Repeater. 
 
 ## Credits
 Code was scavenged from the following sources to build this thing:
