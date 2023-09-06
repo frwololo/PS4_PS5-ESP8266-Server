@@ -1,0 +1,36 @@
+************
+PC TESTS
+************
+WebServer:
+- 10.1.1.1/admin.html showing up config?
+- Set up wifi and save config. Are changes taken into account?
+
+DNS/NAT
+- playstation.net redirects to 10.1.1.1?
+- playstation.com blocked?
+- Other site (e.g. wololo.net) working correctly?
+
+HTTPS
+- https://playstation.net redirects to 10.1.1.1?
+- https://10.1.1.1 redirects to http://10.1.1.1?
+
+***************
+Console Tests
+***************
+Online:
+- Load User guide on PS4 OK?
+- Load GoldHEN on PS4 OK?
+- Load User guide on PS5 OK?
+- Load Exploit on PS5 OK?
+
+Offline:
+- Run tests again in offline mode
+
+**************
+Other
+**************
+- on ESP8266 Heap memory should be at least 30'000 after NAPT startup
+- Check Binary release for personal credentials
+
+Troubleshooting:
+- Create SPIFFS at least once with the Data Upload tool, otherwise SPIFFS might fail

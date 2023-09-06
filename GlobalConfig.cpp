@@ -1,5 +1,9 @@
 #include "GlobalConfig.h"
 
+#include <FS.h>
+#ifdef ESP32
+  #include <SPIFFS.h>
+#endif
 const char* CONFIG_FILE = "/config.ini";
 
 GlobalConfig* GlobalConfig::mInstance = NULL;

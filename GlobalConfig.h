@@ -1,7 +1,8 @@
 #ifndef GLOBALCONFIG_H
 #define GLOBALCONFIG_H
 
-#include <ESP8266WiFi.h>
+//#include <ESP8266WiFi.h>
+#include <Ethernet.h>
 
 //#define GLOBALCONFIG_DEBUG
 extern const char* CONFIG_FILE;
@@ -48,8 +49,6 @@ class GlobalConfig{
     ~GlobalConfig();
       
 };
-
-
 
 
 #endif

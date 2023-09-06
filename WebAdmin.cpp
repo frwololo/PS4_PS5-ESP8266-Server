@@ -1,7 +1,7 @@
 #include "WebAdmin.h"
 #include "GlobalConfig.h"
 
-ESP8266WebServer * WebAdmin::webServer = NULL;
+ESPWebServer * WebAdmin::webServer = NULL;
 File WebAdmin::upFile;
 
 const static char COMMON_CSS[] PROGMEM = "#loader{z-index:1;width:50px;height:50px;margin:0;border:6px solid #f3f3f3;border-radius:50%;border-top:6px solid #3498db;width:50px;height:50px;-webkit-animation:spin 2s linear infinite;animation:spin 2s linear infinite}@-webkit-keyframes spin{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg)}}@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}body{background-color:#1451ae;color:#fff;font-size:20px;font-weight:700;margin:0 0 0 .0;padding:.4em .4em .4em .6em}";
@@ -11,15 +11,15 @@ void WebAdmin::handleConfig()
 
   const char* config_params[] = {"ap_ssid", "ap_pass", "ap_ip", "ap_subnet", "enable_wifi", "wifi_ssid", "wifi_pass"};
   if(webServer->hasArg("ap_ssid")) 
-  {
+  { 
     File iniFile = SPIFFS.open(CONFIG_FILE, "w");
     if (iniFile) {
-    for (const char* element : config_params)
-    { 
-      String tmp = webServer->arg(element);
-      iniFile.print(String(element) + "=" + tmp + "\r\n");
-    }
-    iniFile.close();
+      for (const char* element : config_params)
+      { 
+        String tmp = webServer->arg(element);
+        iniFile.print(String(element) + "=" + tmp + "\r\n");
+      }
+      iniFile.close();
     }
     handleRebootMsg("Config Saved");
   }
@@ -96,7 +96,7 @@ void WebAdmin::handleConfigHtml()
 
 
 
-WebAdmin::WebAdmin(ESP8266WebServer *_webserver) {
+WebAdmin::WebAdmin(ESPWebServer *_webserver) {
 
   webServer = _webserver;
 
@@ -195,13 +195,26 @@ void WebAdmin::handleDelete(){
 
 
 void WebAdmin::handleFileMan() {
+#ifdef ESP32
+  File dir = SPIFFS.open("/");
+#else
   Dir dir = SPIFFS.openDir("/");
+#endif
+  
   const static char header_html[] PROGMEM =  "<!DOCTYPE html><html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>File Manager</title><style type=\"text/css\">a:link {color: #ffffff; text-decoration: none;} a:visited {color: #ffffff; text-decoration: none;} a:hover {color: #ffffff; text-decoration: underline;} a:active {color: #ffffff; text-decoration: underline;} table {font-family: arial, sans-serif; border-collapse: collapse; width: 100%;} td, th {border: 1px solid #dddddd; text-align: left; padding: 8px;} button {display: inline-block; padding: 1px; margin-right: 6px; vertical-align: top; float:left;} body {background-color: #1451AE;color: #ffffff; font-size: 14px; padding: 0.4em 0.4em 0.4em 0.6em; margin: 0 0 0 0.0;}</style><script>function statusDel(fname) {var answer = confirm(\"Are you sure you want to delete \" + fname + \" ?\");if (answer) {return true;} else { return false; }}</script></head><body><br><table>"; 
   const static char template_html[] PROGMEM = "<tr><td><a href=\"_FNAME_\">_FNAME_</a></td><td>_SIZE_</td><td><form action=\"/_FNAME_?dl=1\" method=\"post\"><button type=\"submit\" name=\"file\" value=\"_FNAME_\">Download</button></form></td><td><form action=\"/delete\" method=\"post\"><button type=\"submit\" name=\"file\" value=\"_FNAME_\" onClick=\"return statusDel('_FNAME_');\">Delete</button></form></td></tr>";
   String output = "";
+
+#ifdef ESP32
+  File entry = dir.openNextFile();
+  while(entry){
+    String fname = String(entry.name());
+#else
   while(dir.next()){
     File entry = dir.openFile("r");
     String fname = String(entry.name()).substring(1);
+#endif
+    
     if (fname.length() > 0 && !fname.equals("config.ini"))
     {
       String tmpl = FPSTR(template_html);
@@ -209,8 +222,15 @@ void WebAdmin::handleFileMan() {
       tmpl.replace("_SIZE_", formatBytes(entry.size()));
       output += tmpl;
     }
+#ifdef ESP32
+  entry = dir.openNextFile();
+#else
     entry.close();
+#endif    
   }
+#ifdef ESP32
+      dir.close();
+#endif  
   output += "</table></body></html>";
   webServer->setContentLength( strlen_P(header_html) + output.length());
   webServer->send(200, "text/html", "");

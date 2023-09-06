@@ -4,15 +4,25 @@
 //Extended WebAdmin gives access to optional menus in the WebAdmin pages, but uses additional heap
 //#define EXTENDED_WEBADMIN  
 
+#if defined(ESP8266)
 #include <ESP8266WebServer.h>
+using ESPWebServer = ESP8266WebServer;
+#else
+#include <WebServer.h>
+using ESPWebServer = WebServer;
+#include <FS.h>
+#include <SPIFFS.h>
+#endif
 
 class WebAdmin {
   
   public:
-  WebAdmin(ESP8266WebServer *_webserver);
+  
+  WebAdmin(ESPWebServer *_webserver);
+  
 
   private:
-  static ESP8266WebServer *webServer;
+  static ESPWebServer *webServer;
   static File upFile;
 
 
